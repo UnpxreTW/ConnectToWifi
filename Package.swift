@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "ConnectToWifi",
+    platforms: [.iOS(.v11)],
     products: [
         .library(name: "ConnectToWifi", targets: ["ConnectToWifi"]),
     ],
