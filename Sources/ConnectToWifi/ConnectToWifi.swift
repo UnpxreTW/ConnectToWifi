@@ -12,7 +12,8 @@ public struct ConnectToWifi {
     // MARK: Public Function
     
     public static func bySSID(_ SSID: String, password: String, whenConnected: ((Error?) -> Void)? = nil) {
-        let configuration: NEHotspotConfiguration = .init(ssid: SSID, passphrase: password, isWEP: false)
+        // let configuration: NEHotspotConfiguration = .init(ssid: SSID, passphrase: password, isWEP: false)
+        let configuration: NEHotspotConfiguration = .init(ssid: SSID)
         NEHotspotConfigurationManager.shared.apply(configuration) { error in
             whenConnected?(error)
         }
