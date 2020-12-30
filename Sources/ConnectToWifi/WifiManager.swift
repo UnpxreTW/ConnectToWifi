@@ -14,13 +14,9 @@ public final class WifiManager {
     
     public static var shared: WifiManager = .init()
     
-    // MARK: Private Variable
-    
     // MARK: Lifecycle
     
-    private init() {
-        
-    }
+    private init() {}
     
     // MARK: Public Function
     
