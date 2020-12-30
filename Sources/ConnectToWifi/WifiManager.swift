@@ -24,9 +24,7 @@ public final class WifiManager {
         NEHotspotConfigurationManager.shared.getConfiguredSSIDs { handler($0) }
     }
     
-    // MARK: Internal Function
-    
-    internal func save(_ password: String, in SSID: String) {
+    public func save(_ password: String, in SSID: String) {
         guard let passwordData = password.data(using: .utf8) as CFData? else { return }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -40,6 +38,8 @@ public final class WifiManager {
         }
     }
     
+    // MARK: Internal Function
+    
     internal func findWifiPassword(by SSID: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -50,11 +50,11 @@ public final class WifiManager {
         let status = withUnsafeMutablePointer(to: &dataTypeRef) {
             SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
         }
-        guard status == errSecSuccess else { return nil }
-        if let data = dataTypeRef as! Data? {
-            print(String(data: data, encoding: .utf8))
-        }
-        return nil
+        guard
+            status == errSecSuccess,
+            let data = dataTypeRef as! Data?,
+            let password = String(data: data, encoding: .utf8)
+        else { return nil }
+        return password
     }
-    
 }
