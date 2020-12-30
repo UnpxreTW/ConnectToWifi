@@ -56,10 +56,7 @@ public final class WifiManager {
         }
         guard status == errSecSuccess else { return nil }
         if let data = dataTypeRef as! Data? {
-            print(data)
-        }
-        if let item = dataTypeRef as! [String: Any]? {
-            print(item)
+            print(String(data: data, encoding: .utf8))
         }
         return nil
     }
