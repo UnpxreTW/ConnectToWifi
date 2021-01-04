@@ -15,6 +15,21 @@ public struct ConnectToWifi {
     
     public static func bySSID(
         _ SSID: String,
+        password: String? = nil,
+        whenConnected handler: ((Error?) -> Void)? = nil
+    ) -> ConnectToWifiError? {
+        if let password = password {
+            bySSID(SSID, password: password, whenConnected: handler)
+        } else if let password = manager.findWifiPassword(by: SSID) {
+            bySSID(SSID, password: password, whenConnected: handler)
+        } else {
+            return .missPassword
+        }
+        return nil
+    }
+    
+    public static func bySSID(
+        _ SSID: String,
         whenNotFindPassword getPasswordByUser: (() -> String),
         whenConnected: ((Error?) -> Void)? = nil
     ) {
