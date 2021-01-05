@@ -36,6 +36,9 @@ public struct ConnectToWifi {
         let configuration: NEHotspotConfiguration = .init(ssid: SSID, passphrase: password, isWEP: false)
         NEHotspotConfigurationManager.shared.apply(configuration) { error in
             whenConnected?(error)
+            if error == nil {
+                manager.save(password, in: SSID)
+            }
         }
     }
 }
