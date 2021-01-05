@@ -27,7 +27,7 @@ public struct ConnectToWifi {
         }
         return nil
     }
-    
+
     public static func bySSID(
         _ SSID: String,
         password: String,
@@ -36,9 +36,8 @@ public struct ConnectToWifi {
         let configuration: NEHotspotConfiguration = .init(ssid: SSID, passphrase: password, isWEP: false)
         NEHotspotConfigurationManager.shared.apply(configuration) { error in
             whenConnected?(error)
-            if error == nil {
-                manager.save(password, in: SSID)
-            }
+            guard error == nil else { return }
+            manager.save(password, in: SSID)
         }
     }
 }
