@@ -31,15 +31,29 @@ public final class WifiManager {
             kSecAttrAccount as String: SSID,
             kSecValueData as String: passwordData
         ]
-        let status = SecItemAdd(query as CFDictionary, nil)
-        guard status == errSecSuccess else {
-            os_log("Save Password Failed", type: .error)
-            return
-        }
+        save(query)
     }
     
     public func update(_ password: String, on SSID: String) {
-        
+        guard let passwordData = password.data(using: .utf8) as CFData? else { return }
+        let findOldQuery: [String: Any] = [
+            kSecClass as String: kSecClassInternetPassword,
+            kSecAttrAccount as String: SSID
+        ]
+        let newQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: SSID,
+            kSecValueData as String: passwordData
+        ]
+        let status = SecItemUpdate(findOldQuery as CFDictionary, newQuery as CFDictionary)
+        if status == errSecItemNotFound {
+            save(newQuery)
+        } else {
+            guard status == errSecSuccess else {
+                os_log("Update Password Failed", type: .error)
+                return
+            }
+        }
     }
     
     public func deleteConfig(by SSID: String) {
@@ -73,5 +87,15 @@ public final class WifiManager {
             let password = String(data: data, encoding: .utf8)
         else { return nil }
         return password
+    }
+    
+    // MARK: Private Function
+    
+    private func save(_ query: [String: Any]) {
+        let status = SecItemAdd(query as CFDictionary, nil)
+        guard status == errSecSuccess else {
+            os_log("Save Password Failed", type: .error)
+            return
+        }
     }
 }
