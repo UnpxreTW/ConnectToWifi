@@ -24,7 +24,7 @@ public final class WifiManager {
         NEHotspotConfigurationManager.shared.getConfiguredSSIDs { handler($0) }
     }
     
-    public func save(_ password: String, in SSID: String) {
+    public func save(_ password: String, on SSID: String) {
         guard let passwordData = password.data(using: .utf8) as CFData? else { return }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -42,7 +42,7 @@ public final class WifiManager {
         
     }
     
-    public func deleteConfig(_ SSID: String) {
+    public func deleteConfig(by SSID: String) {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: SSID

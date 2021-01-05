@@ -37,7 +37,7 @@ public struct ConnectToWifi {
         NEHotspotConfigurationManager.shared.apply(configuration) { error in
             whenConnected?(error)
             guard error == nil else { return }
-            manager.save(password, in: SSID)
+            manager.save(password, on: SSID)
         }
     }
 }
