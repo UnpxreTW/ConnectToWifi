@@ -38,6 +38,23 @@ public final class WifiManager {
         }
     }
     
+    public func update(_ password: String, on SSID: String) {
+        
+    }
+    
+    public func deleteConfig(_ SSID: String) {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: SSID
+        ]
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess else {
+            os_log("Delete Password Failed", type: .error)
+            return
+        }
+        NEHotspotConfigurationManager.shared.removeConfiguration(forSSID: SSID)
+    }
+    
     // MARK: Internal Function
     
     internal func findWifiPassword(by SSID: String) -> String? {
