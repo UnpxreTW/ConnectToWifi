@@ -36,7 +36,7 @@ public final class WifiManager {
         let errorCode = withUnsafeMutablePointer(to: &result) {
             SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
         }
-        guard errorCode == errSecSuccess else { return [] }
+        guard errorCode == noErr else { return [] }
         var values = [String: AnyObject]()
         let array = result as? Array<Dictionary<String, Any>>
         for item in array! {
