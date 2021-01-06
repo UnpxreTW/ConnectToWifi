@@ -28,8 +28,8 @@ public final class WifiManager {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
-            // kSecReturnData as String : kCFBooleanFalse as Any,
-            // kSecReturnAttributes as String: true,
+            kSecReturnData as String : kCFBooleanTrue as Any,
+            kSecReturnAttributes as String: kCFBooleanTrue as Any,
             kSecReturnRef as String: kCFBooleanTrue as Any
         ]
         var result: AnyObject?
