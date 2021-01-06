@@ -27,7 +27,6 @@ public final class WifiManager {
     public func getSSIDList() -> [String] {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "",
             kSecMatchLimit as String: kSecMatchLimitAll,
             kSecReturnData as String : true,
             kSecReturnAttributes as String: true,
