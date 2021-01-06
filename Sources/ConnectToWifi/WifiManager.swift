@@ -28,9 +28,9 @@ public final class WifiManager {
         let query: [String: Any] = [
             kSecClass as String: kSecClassInternetPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
-            kSecReturnData as String : kCFBooleanTrue,
-            kSecReturnAttributes as String: kCFBooleanTrue,
-            kSecReturnRef as String: kCFBooleanTrue
+            kSecReturnData as String : true,
+            kSecReturnAttributes as String: true,
+            kSecReturnRef as String: true
         ]
         var result: AnyObject?
         let errorCode = withUnsafeMutablePointer(to: &result) {
