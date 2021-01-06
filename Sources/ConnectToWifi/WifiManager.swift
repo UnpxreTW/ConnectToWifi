@@ -29,7 +29,7 @@ public final class WifiManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
             kSecReturnData as String : false,
-            kSecReturnAttributes as String: true,
+            kSecReturnAttributes as String: false,
             kSecReturnRef as String: true
         ]
         var result: AnyObject?
@@ -44,9 +44,6 @@ public final class WifiManager {
             if let key = item[kSecAttrAccount as String] as? String,
                 let value = item[kSecValueData as String] as? Data {
                 values[key] = String(data: value, encoding:.utf8) as AnyObject?
-            } else if let key = item[kSecAttrLabel as String] as? String,
-                let value = item[kSecValueRef as String] {
-                values[key] = value as AnyObject
             }
         }
         print(values)
