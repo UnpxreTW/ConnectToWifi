@@ -28,9 +28,9 @@ public final class WifiManager {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
-            kSecReturnData as String : kCFBooleanTrue as Any,
-            kSecReturnAttributes as String: kCFBooleanTrue as Any,
-            kSecReturnRef as String: kCFBooleanTrue as Any
+            kSecReturnData as String : false,
+            kSecReturnAttributes as String: true,
+            kSecReturnRef as String: true
         ]
         var result: AnyObject?
         let errorCode = withUnsafeMutablePointer(to: &result) {
@@ -39,12 +39,15 @@ public final class WifiManager {
         print(errorCode.description)
         guard errorCode == noErr else { return [] }
         var values = [String: AnyObject]()
-        let array = result as? Array<Dictionary<String, Any>>
-        for item in array! {
-            if let key = item[kSecAttrAccount as String] as? String,
-                let value = item[kSecValueData as String] as? Data {
-                values[key] = String(data: value, encoding:.utf8) as AnyObject?
+        if let array = result as? Array<Dictionary<String, Any>> {
+            for item in array {
+                if let key = item[kSecAttrAccount as String] as? String,
+                    let value = item[kSecValueData as String] as? Data {
+                    values[key] = String(data: value, encoding:.utf8) as AnyObject?
+                }
             }
+        } else if let array = result as? [String] {
+            return array
         }
         print(values)
         return values.map { $0.key }
