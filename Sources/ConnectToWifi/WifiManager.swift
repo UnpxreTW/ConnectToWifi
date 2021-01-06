@@ -29,8 +29,8 @@ public final class WifiManager {
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
             kSecReturnData as String : false,
-            kSecReturnAttributes as String: false,
-            kSecReturnRef as String: true
+            kSecReturnAttributes as String: true,
+            // kSecReturnRef as String: true
         ]
         var result: AnyObject?
         let errorCode = withUnsafeMutablePointer(to: &result) {
