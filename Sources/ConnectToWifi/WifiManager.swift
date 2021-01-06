@@ -24,6 +24,34 @@ public final class WifiManager {
         NEHotspotConfigurationManager.shared.getConfiguredSSIDs { handler($0) }
     }
     
+    public func getSSIDList() -> [String] {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassInternetPassword,
+            kSecMatchLimit as String: kSecMatchLimitAll,
+            kSecReturnData as String : kCFBooleanTrue,
+            kSecReturnAttributes as String: kCFBooleanTrue,
+            kSecReturnRef as String: kCFBooleanTrue
+        ]
+        var result: AnyObject?
+        let errorCode = withUnsafeMutablePointer(to: &result) {
+            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+        }
+        guard errorCode == errSecSuccess else { return [] }
+        var values = [String: AnyObject]()
+        let array = result as? Array<Dictionary<String, Any>>
+        for item in array! {
+            if let key = item[kSecAttrAccount as String] as? String,
+                let value = item[kSecValueData as String] as? Data {
+                values[key] = String(data: value, encoding:.utf8) as AnyObject?
+            } else if let key = item[kSecAttrLabel as String] as? String,
+                let value = item[kSecValueRef as String] {
+                values[key] = value as AnyObject
+            }
+        }
+        print(values)
+        return values.map { $0.key }
+    }
+    
     public func save(_ password: String, on SSID: String) {
         guard let passwordData = password.data(using: .utf8) as CFData? else { return }
         let query: [String: Any] = [
