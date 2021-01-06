@@ -26,7 +26,7 @@ public final class WifiManager {
     
     public func getSSIDList() -> [String] {
         let query: [String: Any] = [
-            kSecClass as String: kSecClassInternetPassword,
+            kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "",
             kSecMatchLimit as String: kSecMatchLimitAll,
             kSecReturnData as String : true,
@@ -67,7 +67,7 @@ public final class WifiManager {
     public func update(_ password: String, on SSID: String) {
         guard let passwordData = password.data(using: .utf8) as CFData? else { return }
         let findOldQuery: [String: Any] = [
-            kSecClass as String: kSecClassInternetPassword,
+            kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: SSID
         ]
         let newQuery: [String: Any] = [
