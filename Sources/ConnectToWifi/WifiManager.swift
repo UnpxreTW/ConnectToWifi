@@ -34,26 +34,11 @@ public final class WifiManager {
         let errorCode = withUnsafeMutablePointer(to: &result) {
             SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
         }
-        guard errorCode == errSecSuccess else { return [] }
-        if let array = result as? Array<Dictionary<String, Any>> {
-            print(array)
-            var values = [String: AnyObject?]()
-            for item in array {
-                if let key = item[kSecAttrAccount as String] as? String {
-                    values.updateValue(nil, forKey: key)
-                }
-                if let key = item[kSecAttrAccount as String] as? String,
-                    let value = item[kSecValueData as String] as? Data {
-                    values[key] = String(data: value, encoding:.utf8) as AnyObject?
-                }
-            }
-            print(values)
-            return values.map { $0.key }
-        } else if let array = result as? [String] {
-            print(array)
-            return array
-        }
-        return []
+        guard
+            errorCode == errSecSuccess,
+            let resultArray = result as? [[String : Any]]
+        else { return [] }
+        return resultArray.compactMap { $0[kSecAttrAccount as String] as? String }
     }
     
     public func save(_ password: String, on SSID: String) {
