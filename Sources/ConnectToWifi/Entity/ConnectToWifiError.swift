@@ -7,8 +7,8 @@
 import Foundation
 
 public enum ConnectToWifiError: Error {
-    
+
     case missPassword
-    
+
     case keychain(error: OSStatus)
 }

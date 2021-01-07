@@ -8,11 +8,11 @@
 import NetworkExtension
 
 public struct ConnectToWifi {
-    
+
     public static var manager: WifiManager = .shared
-    
+
     // MARK: Public Function
-    
+
     public static func bySSID(
         _ SSID: String,
         password: String? = nil,
