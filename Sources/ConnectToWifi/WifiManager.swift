@@ -36,6 +36,7 @@ public final class WifiManager {
         }
         guard errorCode == errSecSuccess else { return [] }
         if let array = result as? Array<Dictionary<String, Any>> {
+            print(array)
             var values = [String: AnyObject]()
             for item in array {
                 if let key = item[kSecAttrAccount as String] as? String,
