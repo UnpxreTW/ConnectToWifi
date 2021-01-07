@@ -28,7 +28,6 @@ public final class WifiManager {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
-            kSecReturnData as String : kCFBooleanFalse as Any,
             kSecReturnAttributes as String: true,
             kSecReturnRef as String: true
         ]
