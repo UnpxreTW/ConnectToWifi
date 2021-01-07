@@ -5,12 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "ConnectToWifi",
-    platforms: [.iOS(.v11)],
+    platforms: [.iOS(.v12)],
     products: [
-        .library(name: "ConnectToWifi", targets: ["ConnectToWifi"]),
+        .library(name: "ConnectToWifi", targets: ["ConnectToWifi"])
     ],
     targets: [
         .target(name: "ConnectToWifi", dependencies: []),
-        .testTarget(name: "ConnectToWifiTests", dependencies: ["ConnectToWifi"]),
+        .testTarget(name: "ConnectToWifiTests", dependencies: ["ConnectToWifi"])
     ]
 )
