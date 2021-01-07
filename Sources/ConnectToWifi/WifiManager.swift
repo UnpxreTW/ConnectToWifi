@@ -14,6 +14,10 @@ public final class WifiManager {
     
     public static var shared: WifiManager = .init()
     
+    // MARK: Private Variable
+    
+    private static var moduleKey = ("WifiManager.SSIDPassword").data(using: .utf8) as CFData? as Any
+    
     // MARK: Lifecycle
     
     private init() {}
@@ -27,6 +31,7 @@ public final class WifiManager {
     public func getSSIDList() -> [String] {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrGeneric as String: WifiManager.moduleKey,
             kSecReturnAttributes as String: true,
             kSecMatchLimit as String: kSecMatchLimitAll
         ]
@@ -45,6 +50,7 @@ public final class WifiManager {
         guard let passwordData = password.data(using: .utf8) as CFData? else { return }
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrGeneric as String: WifiManager.moduleKey,
             kSecAttrAccount as String: SSID,
             kSecValueData as String: passwordData
         ]
@@ -55,10 +61,12 @@ public final class WifiManager {
         guard let passwordData = password.data(using: .utf8) as CFData? else { return }
         let findOldQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrGeneric as String: WifiManager.moduleKey,
             kSecAttrAccount as String: SSID
         ]
         let newQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrGeneric as String: WifiManager.moduleKey,
             kSecAttrAccount as String: SSID,
             kSecValueData as String: passwordData
         ]
@@ -76,6 +84,7 @@ public final class WifiManager {
     public func deleteConfig(by SSID: String) {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrGeneric as String: WifiManager.moduleKey,
             kSecAttrAccount as String: SSID
         ]
         let status = SecItemDelete(query as CFDictionary)
@@ -91,6 +100,7 @@ public final class WifiManager {
     internal func findWifiPassword(by SSID: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrGeneric as String: WifiManager.moduleKey,
             kSecReturnData as String: true,
             kSecAttrAccount as String: SSID
         ]
