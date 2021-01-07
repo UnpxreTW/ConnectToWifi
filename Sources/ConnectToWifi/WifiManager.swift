@@ -30,13 +30,13 @@ public final class WifiManager {
             kSecReturnAttributes as String: true,
             kSecMatchLimit as String: kSecMatchLimitAll
         ]
-        var result: AnyObject?
-        let errorCode = withUnsafeMutablePointer(to: &result) {
+        var resultRef: AnyObject?
+        let errorCode = withUnsafeMutablePointer(to: &resultRef) {
             SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
         }
         guard
             errorCode == errSecSuccess,
-            let resultArray = result as? [[String : Any]]
+            let resultArray = resultRef as? [[String : Any]]
         else { return [] }
         return resultArray.compactMap { $0[kSecAttrAccount as String] as? String }
     }
@@ -67,7 +67,7 @@ public final class WifiManager {
             save(newQuery)
         } else {
             guard status == errSecSuccess else {
-                os_log("Update Password Failed", type: .error)
+                os_log("%@", type: .error, SecCopyErrorMessageString(status, nil).debugDescription)
                 return
             }
         }
@@ -102,7 +102,10 @@ public final class WifiManager {
             status == errSecSuccess,
             let data = dataTypeRef as! Data?,
             let password = String(data: data, encoding: .utf8)
-        else { return nil }
+        else {
+            os_log("%@", type: .error, SecCopyErrorMessageString(status, nil).debugDescription)
+            return nil
+        }
         return password
     }
     
@@ -111,7 +114,7 @@ public final class WifiManager {
     private func save(_ query: [String: Any]) {
         let status = SecItemAdd(query as CFDictionary, nil)
         guard status == errSecSuccess else {
-            os_log("Save Password Failed", type: .error)
+            os_log("%@", type: .error, SecCopyErrorMessageString(status, nil).debugDescription)
             return
         }
     }
