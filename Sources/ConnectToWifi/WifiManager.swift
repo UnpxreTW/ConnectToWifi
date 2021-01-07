@@ -27,8 +27,8 @@ public final class WifiManager {
     public func getSSIDList() -> [String] {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecMatchLimit as String: kSecMatchLimitAll,
-            kSecReturnAttributes as String: kCFBooleanTrue!
+            kSecReturnAttributes as String: kCFBooleanTrue!,
+            kSecMatchLimit as String: kSecMatchLimitAll
         ]
         var result: AnyObject?
         let errorCode = withUnsafeMutablePointer(to: &result) {
