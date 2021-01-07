@@ -27,7 +27,7 @@ public final class WifiManager {
     public func getSSIDList() -> [String] {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecReturnAttributes as String: kCFBooleanTrue!,
+            kSecReturnAttributes as String: true,
             kSecMatchLimit as String: kSecMatchLimitAll
         ]
         var result: AnyObject?
@@ -37,8 +37,11 @@ public final class WifiManager {
         guard errorCode == errSecSuccess else { return [] }
         if let array = result as? Array<Dictionary<String, Any>> {
             print(array)
-            var values = [String: AnyObject]()
+            var values = [String: AnyObject?]()
             for item in array {
+                if let key = item[kSecAttrAccount as String] as? String {
+                    values.updateValue(nil, forKey: key)
+                }
                 if let key = item[kSecAttrAccount as String] as? String,
                     let value = item[kSecValueData as String] as? Data {
                     values[key] = String(data: value, encoding:.utf8) as AnyObject?
