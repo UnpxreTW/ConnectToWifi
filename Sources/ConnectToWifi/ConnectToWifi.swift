@@ -16,7 +16,7 @@ public struct ConnectToWifi {
     public static func bySSID(
         _ SSID: String,
         password: String? = nil,
-        whenConnected handler: ((Error?) -> Void)? = nil
+        whenConnected handler: ((NEHotspotConfigurationError?) -> Void)? = nil
     ) -> ConnectToWifiError? {
         if let password = password {
             bySSID(SSID, password: password, whenConnected: handler)
@@ -31,13 +31,23 @@ public struct ConnectToWifi {
     public static func bySSID(
         _ SSID: String,
         password: String,
-        whenConnected: ((Error?) -> Void)? = nil
+        whenConnected: ((NEHotspotConfigurationError?) -> Void)? = nil
     ) {
         let configuration: NEHotspotConfiguration = .init(ssid: SSID, passphrase: password, isWEP: false)
         NEHotspotConfigurationManager.shared.apply(configuration) { error in
-            whenConnected?(error)
-            guard error == nil else { return }
-            manager.update(password, on: SSID)
+            let neError = NEHotspotConfigurationError(by: error)
+            whenConnected?(neError)
+            switch neError {
+            case .some(let error):
+                switch error {
+                case .alreadyAssociated:
+                    manager.save(password, on: SSID)
+                default:
+                    break
+                }
+            case .none:
+                manager.save(password, on: SSID)
+            }
         }
     }
 }
