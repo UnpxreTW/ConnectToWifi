@@ -7,7 +7,7 @@
 import NetworkExtension
 
 extension NEHotspotConfigurationError {
-    
+
     init?(by error: Error?) {
         guard let error = error else { return nil }
         let nsError = error as NSError
