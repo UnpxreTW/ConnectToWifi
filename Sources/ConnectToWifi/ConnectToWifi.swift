@@ -16,12 +16,13 @@ public struct ConnectToWifi {
     public static func bySSID(
         _ SSID: String,
         password: String? = nil,
+        saveToKeychain: Bool = true,
         whenConnected handler: ((NEHotspotConfigurationError?) -> Void)? = nil
     ) -> ConnectToWifiError? {
         if let password = password {
-            bySSID(SSID, password: password, whenConnected: handler)
+            bySSID(SSID, password: password, saveToKeychain: saveToKeychain, whenConnected: handler)
         } else if let password = manager.findWifiPassword(by: SSID) {
-            bySSID(SSID, password: password, whenConnected: handler)
+            bySSID(SSID, password: password, saveToKeychain: saveToKeychain, whenConnected: handler)
         } else {
             return .missPassword
         }
@@ -31,6 +32,7 @@ public struct ConnectToWifi {
     public static func bySSID(
         _ SSID: String,
         password: String,
+        saveToKeychain: Bool = true,
         whenConnected: ((NEHotspotConfigurationError?) -> Void)? = nil
     ) {
         let configuration: NEHotspotConfiguration = .init(ssid: SSID, passphrase: password, isWEP: false)
@@ -41,12 +43,12 @@ public struct ConnectToWifi {
             case .some(let error):
                 switch error {
                 case .alreadyAssociated:
-                    manager.save(password, on: SSID)
+                    if saveToKeychain { manager.save(password, on: SSID) }
                 default:
                     break
                 }
             case .none:
-                manager.save(password, on: SSID)
+                if saveToKeychain { manager.save(password, on: SSID) }
             }
         }
     }
