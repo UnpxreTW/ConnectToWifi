@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 Unpxre (GitHub: UnpxreTW)
+# SPDX-License-Identifier: Apache-2.0
+
+name: REUSE Compliance
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: fsfe/reuse-action@v6
